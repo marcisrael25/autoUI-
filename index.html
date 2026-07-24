@@ -66,16 +66,18 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       line-height: 1.6;
       transition: background-color 0.3s, color 0.3s;
+      overflow-x: hidden;
     }
 
     .container {
+      width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 1.5rem;
+      padding: 0 1.25rem;
     }
 
     /* ==========================================================================
-       3. NAVIGATION (HEADER)
+       3. NAVIGATION (HEADER) RESPONSIVE
        ========================================================================== */
     header {
       position: sticky;
@@ -100,7 +102,7 @@
     }
 
     .brand-logo {
-      height: 40px;
+      height: 36px;
       width: auto;
       display: block;
       cursor: pointer;
@@ -129,7 +131,7 @@
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.75rem;
     }
 
     .theme-toggle {
@@ -151,18 +153,34 @@
       background: var(--bg-surface-hover);
     }
 
+    /* Bouton Menu Burger Mobile */
+    .menu-burger {
+      display: none;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 1.25rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
+
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 0.65rem 1.4rem;
+      padding: 0.65rem 1.2rem;
       border-radius: 8px;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       text-decoration: none;
       transition: all 0.2s ease;
       cursor: pointer;
       border: none;
+      white-space: nowrap;
     }
 
     .btn-primary {
@@ -187,8 +205,43 @@
       border-color: var(--primary-cyan);
     }
 
+    /* Mobile Menu Drawer */
+    @media (max-width: 768px) {
+      .menu-burger {
+        display: flex;
+      }
+
+      nav {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: var(--bg-surface);
+        border-bottom: 1px solid var(--border-color);
+        padding: 1.5rem;
+        display: none;
+        box-shadow: 0 10px 25px var(--shadow-color);
+      }
+
+      nav.mobile-open {
+        display: block;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+      }
+
+      .nav-links a {
+        font-size: 1.1rem;
+        width: 100%;
+        display: block;
+      }
+    }
+
     /* ==========================================================================
-       4. GESTION DES PAGES (VIEWHOLDER)
+       4. GESTION DES PAGES
        ========================================================================== */
     .page-section {
       display: block;
@@ -199,13 +252,19 @@
     }
 
     /* ==========================================================================
-       5. HERO SECTION & FEATURES
+       5. HERO SECTION & FEATURES RESPONSIVES
        ========================================================================== */
     .hero {
-      padding: 8rem 0 5rem;
+      padding: 4rem 0 3rem;
       text-align: center;
       position: relative;
       overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        padding: 7rem 0 5rem;
+      }
     }
 
     .hero-glow {
@@ -213,7 +272,8 @@
       top: 20%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 600px;
+      width: 100%;
+      max-width: 600px;
       height: 300px;
       background: radial-gradient(circle, var(--accent-glow) 0%, rgba(0,0,0,0) 70%);
       z-index: -1;
@@ -224,23 +284,23 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.35rem 1rem;
+      padding: 0.35rem 0.85rem;
       background: rgba(37, 99, 235, 0.1);
       border: 1px solid rgba(59, 130, 246, 0.3);
       border-radius: 50px;
       color: var(--primary-cyan);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 700;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       letter-spacing: 0.5px;
     }
 
     .hero h1 {
-      font-size: clamp(2.5rem, 5vw, 4.2rem);
+      font-size: clamp(2rem, 8vw, 4rem);
       font-weight: 900;
-      line-height: 1.15;
-      margin-bottom: 1.5rem;
-      letter-spacing: -1px;
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.5px;
     }
 
     .hero h1 .gradient-text {
@@ -250,56 +310,58 @@
     }
 
     .hero p {
-      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      font-size: clamp(1rem, 3.5vw, 1.25rem);
       color: var(--text-muted);
       max-width: 720px;
-      margin: 0 auto 2.5rem;
+      margin: 0 auto 2rem;
     }
 
     .hero-actions {
       display: flex;
-      gap: 1rem;
+      gap: 0.75rem;
       justify-content: center;
-      flex-wrap: wrap;
+      flex-direction: column;
+    }
+
+    @media (min-width: 480px) {
+      .hero-actions {
+        flex-direction: row;
+      }
     }
 
     .features-section {
-      padding: 6rem 0;
+      padding: 4rem 0;
       border-top: 1px solid var(--border-color);
     }
 
     .section-title {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 2.5rem;
     }
 
     .section-title h2 {
-      font-size: 2.2rem;
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
       font-weight: 800;
       margin-bottom: 0.5rem;
-    }
-
-    .section-title p {
-      color: var(--text-muted);
     }
 
     .filter-tabs {
       display: flex;
       justify-content: center;
       gap: 0.5rem;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
       flex-wrap: wrap;
     }
 
     .tab-btn {
-      padding: 0.5rem 1.2rem;
+      padding: 0.4rem 1rem;
       border-radius: 20px;
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
       color: var(--text-muted);
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       transition: all 0.2s;
     }
 
@@ -311,50 +373,44 @@
 
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
     }
 
     .feature-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
-      padding: 2rem;
+      padding: 1.5rem;
       border-radius: 16px;
-      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--primary-cyan);
-      box-shadow: 0 10px 30px var(--shadow-color);
+      transition: transform 0.2s, border-color 0.2s;
     }
 
     .feature-icon {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       background: rgba(6, 182, 212, 0.1);
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1rem;
       color: var(--primary-cyan);
-      font-size: 1.5rem;
+      font-size: 1.3rem;
     }
 
     .feature-card h3 {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       margin-bottom: 0.5rem;
     }
 
     .feature-card p {
       color: var(--text-muted);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     /* DEMO CODE INTERACTIVE */
     .demo-section {
-      padding: 6rem 0;
+      padding: 4rem 0;
       background: var(--bg-surface);
       border-top: 1px solid var(--border-color);
       border-bottom: 1px solid var(--border-color);
@@ -362,14 +418,15 @@
 
     .demo-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2.5rem;
+      grid-template-columns: 1fr;
+      gap: 2rem;
       align-items: center;
     }
 
-    @media (max-width: 900px) {
+    @media (min-width: 900px) {
       .demo-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
       }
     }
 
@@ -379,6 +436,7 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 12px 30px var(--shadow-color);
+      width: 100%;
     }
 
     .editor-header {
@@ -391,8 +449,8 @@
     }
 
     .dot {
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
     }
     .dot-red { background: #ef4444; }
@@ -401,15 +459,15 @@
 
     .editor-title {
       color: var(--text-muted);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       margin-left: auto;
       font-family: monospace;
     }
 
     .code-content {
-      padding: 1.5rem;
+      padding: 1rem;
       font-family: "Fira Code", Consolas, Monaco, monospace;
-      font-size: 0.9rem;
+      font-size: 0.825rem;
       color: #38bdf8;
       overflow-x: auto;
       line-height: 1.5;
@@ -420,79 +478,91 @@
     .code-str { color: #4ade80; }
 
     /* ==========================================================================
-       6. SECTION DOCUMENTATION (NOUVEAU)
+       6. DOCUMENTATION RESPONSIVE
        ========================================================================== */
     .doc-layout {
       display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 3rem;
-      padding: 3rem 0 6rem;
-      min-height: calc(100vh - 70px);
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      padding: 2rem 0 4rem;
     }
 
-    @media (max-width: 850px) {
+    @media (min-width: 850px) {
       .doc-layout {
-        grid-template-columns: 1fr;
+        grid-template-columns: 240px 1fr;
+        gap: 3rem;
+        padding: 3rem 0 6rem;
       }
     }
 
     /* Sidebar Documentation */
     .doc-sidebar {
-      position: sticky;
-      top: 100px;
-      height: fit-content;
-      border-right: 1px solid var(--border-color);
-      padding-right: 1.5rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      border-radius: 12px;
+    }
+
+    @media (min-width: 850px) {
+      .doc-sidebar {
+        background: transparent;
+        border: none;
+        border-right: 1px solid var(--border-color);
+        padding: 0 1.5rem 0 0;
+        border-radius: 0;
+        position: sticky;
+        top: 90px;
+        height: fit-content;
+      }
     }
 
     .doc-sidebar h3 {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--primary-cyan);
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
 
     .doc-menu {
       list-style: none;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .doc-menu li {
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.25rem;
     }
 
     .doc-menu a {
       display: block;
-      padding: 0.5rem 0.8rem;
+      padding: 0.45rem 0.75rem;
       color: var(--text-muted);
       text-decoration: none;
       border-radius: 6px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       transition: all 0.2s;
     }
 
     .doc-menu a:hover, .doc-menu a.active {
-      background: var(--bg-surface);
+      background: var(--bg-surface-hover);
       color: var(--text-main);
       font-weight: 600;
     }
 
-    /* Content Documentation */
     .doc-content h1 {
-      font-size: 2.5rem;
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
       margin-bottom: 1rem;
     }
 
     .doc-content p {
       color: var(--text-muted);
-      margin-bottom: 1.5rem;
-      font-size: 1.05rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.95rem;
     }
 
     .doc-content h2 {
-      font-size: 1.6rem;
-      margin: 2.5rem 0 1rem;
+      font-size: clamp(1.3rem, 4vw, 1.6rem);
+      margin: 2rem 0 0.85rem;
       padding-bottom: 0.5rem;
       border-bottom: 1px solid var(--border-color);
     }
@@ -501,39 +571,47 @@
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
       border-left: 4px solid var(--primary-cyan);
-      padding: 1.25rem;
+      padding: 1rem;
       border-radius: 8px;
-      margin: 1.5rem 0;
+      margin: 1.25rem 0;
+      font-size: 0.9rem;
     }
 
     /* ==========================================================================
-       7. FOOTER
+       7. FOOTER RESPONSIVE
        ========================================================================== */
     footer {
-      padding: 4rem 0 2rem;
+      padding: 3rem 0 2rem;
       background: var(--bg-body);
       color: var(--text-muted);
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       border-top: 1px solid var(--border-color);
     }
 
     .footer-grid {
       display: grid;
-      grid-template-columns: 2fr repeat(3, 1fr);
-      gap: 3rem;
-      margin-bottom: 3rem;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
     }
 
-    @media (max-width: 768px) {
+    @media (min-width: 480px) {
       .footer-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 850px) {
+      .footer-grid {
+        grid-template-columns: 2fr repeat(3, 1fr);
+        gap: 3rem;
       }
     }
 
     .footer-col h4 {
       color: var(--text-main);
-      margin-bottom: 1rem;
-      font-size: 1rem;
+      margin-bottom: 0.85rem;
+      font-size: 0.95rem;
     }
 
     .footer-col ul {
@@ -541,7 +619,7 @@
     }
 
     .footer-col ul li {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
     }
 
     .footer-col ul a {
@@ -557,8 +635,9 @@
 
     .footer-bottom {
       border-top: 1px solid var(--border-color);
-      padding-top: 2rem;
+      padding-top: 1.5rem;
       text-align: center;
+      font-size: 0.8rem;
     }
   </style>
 </head>
@@ -591,7 +670,8 @@
         </svg>
       </a>
 
-      <nav>
+      <!-- Menu Principal -->
+      <nav id="mobileNav">
         <ul class="nav-links">
           <li><a class="nav-trigger" data-target="home-page" data-anchor="#features">Fonctionnalités</a></li>
           <li><a class="nav-trigger" data-target="home-page" data-anchor="#demo">Démo</a></li>
@@ -602,6 +682,7 @@
       <div class="nav-actions">
         <button class="theme-toggle" id="themeToggle" aria-label="Changer le thème">🌙</button>
         <a class="btn btn-primary nav-trigger" data-target="doc-page">Démarrer</a>
+        <button class="menu-burger" id="burgerBtn" aria-label="Menu Mobile">☰</button>
       </div>
     </div>
   </header>
@@ -631,7 +712,7 @@
       </div>
     </section>
 
-    <!-- FONCTIONNALITÉS (AVEC FILTRE) -->
+    <!-- FONCTIONNALITÉS -->
     <section class="features-section" id="features">
       <div class="container">
         <div class="section-title">
@@ -705,7 +786,7 @@
   </main>
 
   <!-- ==========================================================================
-       PAGE DOCUMENTATION (NOUVELLE PAGE)
+       PAGE DOCUMENTATION
        ========================================================================== -->
   <main id="doc-page" class="page-section hidden">
     <div class="container doc-layout">
@@ -729,7 +810,7 @@
       <article class="doc-content">
         <section id="doc-intro">
           <h1>Documentation AutoUI</h1>
-          <p>Bienvenue dans la documentation officielle d'AutoUI v10.0. AutoUI est un framework léger conçu pour accélérer le développement d'applications Web à l'aide des standard Web Components modernes.</p>
+          <p>Bienvenue dans la documentation officielle d'AutoUI v10.0. AutoUI est un framework léger conçu pour accélérer le développement d'applications Web à l'aide des standards Web Components modernes.</p>
           
           <div class="doc-box">
             <strong>Points Forts :</strong> Encapsulation CSS native via Shadow DOM, rendu ultra rapide, zéro configuration webpack ou build compliquée nécessaire.
@@ -773,7 +854,7 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <h3 style="color: var(--text-main); margin-bottom: 1rem;">AutoUI</h3>
+          <h3 style="color: var(--text-main); margin-bottom: 0.75rem;">AutoUI</h3>
           <p>Le framework web JavaScript moderne, léger et sans dépendances.</p>
         </div>
         <div class="footer-col">
@@ -808,14 +889,25 @@
 
   <!-- SCRIPTS INTERACTIFS -->
   <script>
-    // 1. Navigation SPA (Basculement entre Accueil et Documentation)
+    // 1. Navigation SPA & Menu Mobile Burger
+    const burgerBtn = document.getElementById('burgerBtn');
+    const mobileNav = document.getElementById('mobileNav');
     const navTriggers = document.querySelectorAll('.nav-trigger');
     const pageSections = document.querySelectorAll('.page-section');
 
+    // Toggle menu mobile
+    burgerBtn.addEventListener('click', () => {
+      mobileNav.classList.toggle('mobile-open');
+    });
+
+    // Basculement entre les pages (Accueil / Doc)
     navTriggers.forEach(trigger => {
       trigger.addEventListener('click', (e) => {
         const targetPageId = trigger.getAttribute('data-target');
         const anchor = trigger.getAttribute('data-anchor');
+
+        // Fermer le menu mobile s'il est ouvert
+        mobileNav.classList.remove('mobile-open');
 
         // Basculer l'affichage des pages
         pageSections.forEach(page => {
@@ -829,7 +921,7 @@
         // Remonter en haut de page
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        // Si ancrage spécifique sur la page d'accueil
+        // Gestion de l'ancrage interne
         if (anchor && targetPageId === 'home-page') {
           setTimeout(() => {
             const element = document.querySelector(anchor);
@@ -851,7 +943,7 @@
       themeToggleBtn.textContent = newTheme === 'dark' ? '🌙' : '☀️';
     });
 
-    // 3. Filtre Interactif des Fonctionnalités (Page d'accueil)
+    // 3. Filtre Interactif des Fonctionnalités
     const filterBtns = document.querySelectorAll('.tab-btn');
     const featureCards = document.querySelectorAll('.feature-card');
 
@@ -875,7 +967,7 @@
     // 4. Navigation interne dans la Documentation
     const docLinks = document.querySelectorAll('.doc-link');
     docLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
+      link.addEventListener('click', () => {
         docLinks.forEach(l => l.classList.remove('active'));
         link.classList.add('active');
       });
