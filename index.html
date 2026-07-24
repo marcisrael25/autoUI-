@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoUI — Le Framework JavaScript Web Components Ultraléger</title>
+  <meta name="description" content="AutoUI est un framework UI modulaire et réactif basé sur les Web Components natifs. Zéro dépendance, ultra rapide et conçu pour le web moderne.">
+  <meta name="theme-color" content="#020617">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AutoUI — Reactive Web Framework">
+  <meta property="og:description" content="Créez des applications web ultra-rapides avec des Web Components isolés.">
+
+  <!-- Importation du script via CDN -->
+  <script src="https://cdn.jsdelivr.net/gh/autoui/autoui@v1.0.0/dist/autoui.min.js" defer></script>
+
+  <style>
+    /* ==========================================================================
+       1. VARIABLES ET THEMES
+       ========================================================================== */
+    :root[data-theme="dark"] {
+      --bg-body: #020617;
+      --bg-surface: #0f172a;
+      --bg-surface-hover: #1e293b;
+      --border-color: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #2563eb;
+      --primary-cyan: #06b6d4;
+      --accent-glow: rgba(6, 182, 212, 0.15);
+      --code-bg: #030712;
+      --shadow-color: rgba(0, 0, 0, 0.5);
+    }
+
+    :root[data-theme="light"] {
+      --bg-body: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-hover: #f1f5f9;
+      --border-color: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --primary: #2563eb;
+      --primary-cyan: #0284c7;
+      --accent-glow: rgba(37, 99, 235, 0.1);
+      --code-bg: #0f172a;
+      --shadow-color: rgba(0, 0, 0, 0.08);
+    }
+
+    /* ==========================================================================
+       2. RESET & STYLES DE BASE
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ==========================================================================
+       3. NAVIGATION (HEADER)
+       ========================================================================== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(2, 6, 23, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      transition: background 0.3s;
+    }
+
+    :root[data-theme="light"] header {
+      background: rgba(248, 250, 252, 0.85);
+    }
+
+    .nav-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+
+    .brand-logo {
+      height: 40px;
+      width: auto;
+      display: block;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--primary-cyan);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .theme-toggle {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      transition: background 0.2s;
+    }
+
+    .theme-toggle:hover {
+      background: var(--bg-surface-hover);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 1.4rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-cyan));
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: var(--bg-surface);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-outline:hover {
+      background: var(--bg-surface-hover);
+      border-color: var(--primary-cyan);
+    }
+
+    /* ==========================================================================
+       4. GESTION DES PAGES (VIEWHOLDER)
+       ========================================================================== */
+    .page-section {
+      display: block;
+    }
+
+    .page-section.hidden {
+      display: none !important;
+    }
+
+    /* ==========================================================================
+       5. HERO SECTION & FEATURES
+       ========================================================================== */
+    .hero {
+      padding: 8rem 0 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 300px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, rgba(0,0,0,0) 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 1rem;
+      background: rgba(37, 99, 235, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 50px;
+      color: var(--primary-cyan);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.5px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+      letter-spacing: -1px;
+    }
+
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, var(--text-main) 30%, var(--primary-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .features-section {
+      padding: 6rem 0;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title p {
+      color: var(--text-muted);
+    }
+
+    .filter-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      padding: 2rem;
+      border-radius: 16px;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary-cyan);
+      box-shadow: 0 10px 30px var(--shadow-color);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(6, 182, 212, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      color: var(--primary-cyan);
+      font-size: 1.5rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* DEMO CODE INTERACTIVE */
+    .demo-section {
+      padding: 6rem 0;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .demo-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .code-editor {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px var(--shadow-color);
+    }
+
+    .editor-header {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+
+    .editor-title {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-left: auto;
+      font-family: monospace;
+    }
+
+    .code-content {
+      padding: 1.5rem;
+      font-family: "Fira Code", Consolas, Monaco, monospace;
+      font-size: 0.9rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+
+    .code-tag { color: #38bdf8; }
+    .code-attr { color: #a78bfa; }
+    .code-str { color: #4ade80; }
+
+    /* ==========================================================================
+       6. SECTION DOCUMENTATION (NOUVEAU)
+       ========================================================================== */
+    .doc-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 3rem;
+      padding: 3rem 0 6rem;
+      min-height: calc(100vh - 70px);
+    }
+
+    @media (max-width: 850px) {
+      .doc-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Sidebar Documentation */
+    .doc-sidebar {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+      border-right: 1px solid var(--border-color);
+      padding-right: 1.5rem;
+    }
+
+    .doc-sidebar h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary-cyan);
+      margin-bottom: 1rem;
+    }
+
+    .doc-menu {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+
+    .doc-menu li {
+      margin-bottom: 0.4rem;
+    }
+
+    .doc-menu a {
+      display: block;
+      padding: 0.5rem 0.8rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .doc-menu a:hover, .doc-menu a.active {
+      background: var(--bg-surface);
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* Content Documentation */
+    .doc-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .doc-content p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+    }
+
+    .doc-content h2 {
+      font-size: 1.6rem;
+      margin: 2.5rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .doc-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--primary-cyan);
+      padding: 1.25rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+    }
+
+    /* ==========================================================================
+       7. FOOTER
+       ========================================================================== */
+    footer {
+      padding: 4rem 0 2rem;
+      background: var(--bg-body);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .footer-col h4 {
+      color: var(--text-main);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-col ul a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+
+    .footer-col ul a:hover {
+      color: var(--primary-cyan);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border-color);
+      padding-top: 2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER / NAVBAR -->
+  <header>
+    <div class="container nav-wrapper">
+      <a class="nav-trigger" data-target="home-page" aria-label="Accueil AutoUI">
+        <svg class="brand-logo" viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="blue-pure-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#2563eb" />
+              <stop offset="50%" stop-color="#3b82f6" />
+              <stop offset="100%" stop-color="#06b6d4" />
+            </linearGradient>
+            <filter id="clean-glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="8" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+          <g transform="translate(20, 20)">
+            <path d="M 50 25 L 15 80 L 50 135" fill="none" stroke="url(#blue-pure-gradient)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" filter="url(#clean-glow)"/>
+            <path d="M 110 25 L 145 80 L 110 135" fill="none" stroke="url(#blue-pure-gradient)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" filter="url(#clean-glow)"/>
+            <path d="M 88 35 L 62 80 L 82 80 L 72 125 L 98 80 L 78 80 Z" fill="#ffffff"/>
+          </g>
+          <g transform="translate(210, 120)">
+            <text font-family="-apple-system, sans-serif" font-weight="900" font-size="80" fill="#ffffff">Auto<tspan fill="url(#blue-pure-gradient)">UI</tspan></text>
+          </g>
+        </svg>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a class="nav-trigger" data-target="home-page" data-anchor="#features">Fonctionnalités</a></li>
+          <li><a class="nav-trigger" data-target="home-page" data-anchor="#demo">Démo</a></li>
+          <li><a class="nav-trigger" data-target="doc-page">Documentation</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Changer le thème">🌙</button>
+        <a class="btn btn-primary nav-trigger" data-target="doc-page">Démarrer</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       PAGE D'ACCUEIL
+       ========================================================================== -->
+  <main id="home-page" class="page-section">
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <div class="hero-glow"></div>
+      <div class="container">
+        <div class="badge">
+          <span>⚡ AutoUI v10.0 Pro Suite</span>
+        </div>
+        <h1>
+          Développez des interfaces <br>
+          <span class="gradient-text">réactives & ultralégères</span>
+        </h1>
+        <p>
+          AutoUI est un framework UI basé sur les Web Components natifs du navigateur. Zéro dépendance externe, performance maximale et encapsulation totale.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary nav-trigger" data-target="doc-page">Explorer la Doc</a>
+          <a href="#demo" class="btn btn-outline">Voir l'Exemple</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FONCTIONNALITÉS (AVEC FILTRE) -->
+    <section class="features-section" id="features">
+      <div class="container">
+        <div class="section-title">
+          <h2>Conçu pour les performances</h2>
+          <p>Tout ce dont vous avez besoin pour construire des applications modernes.</p>
+        </div>
+
+        <div class="filter-tabs">
+          <button class="tab-btn active" data-filter="all">Tous</button>
+          <button class="tab-btn" data-filter="core">Cœur</button>
+          <button class="tab-btn" data-filter="perf">Performance</button>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card" data-category="core">
+            <div class="feature-icon">🧩</div>
+            <h3>Web Components Natifs</h3>
+            <p>Basé sur le standard Shadow DOM pour isoler complètement vos styles et votre logique JavaScript.</p>
+          </div>
+
+          <div class="feature-card" data-category="perf">
+            <div class="feature-icon">⚡</div>
+            <h3>Zéro Dépendance</h3>
+            <p>Aucun bundle lourd ni fichier node_modules complexe. Un simple fichier JS de quelques kilooctets.</p>
+          </div>
+
+          <div class="feature-card" data-category="core">
+            <div class="feature-icon">🔄</div>
+            <h3>State Management</h3>
+            <p>Gestionnaire d'état réactif intégré pour mettre à jour automatiquement l'interface lors des changements.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEMO CODE INTERACTIVE -->
+    <section class="demo-section" id="demo">
+      <div class="container">
+        <div class="demo-grid">
+          <div>
+            <h2>Prise en main en moins de 2 minutes</h2>
+            <p style="color: var(--text-muted); margin: 1rem 0 1.5rem;">
+              Importez simplement le script CDN et déclarez vos balises personnalisées directement dans le HTML.
+            </p>
+            <a class="btn btn-outline nav-trigger" data-target="doc-page">Lire le Guide d'Installation</a>
+          </div>
+
+          <div class="code-editor">
+            <div class="editor-header">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+              <span class="editor-title">index.html</span>
+            </div>
+            <div class="code-content">
+              <pre><code><span class="code-tag">&lt;!-- CDN Direct --&gt;</span>
+<span class="code-tag">&lt;script</span> <span class="code-attr">src</span>=<span class="code-str">"https://cdn.jsdelivr.net/gh/autoui/autoui@v1.0.0/dist/autoui.min.js"</span> <span class="code-attr">defer</span><span class="code-tag">&gt;&lt;/script&gt;</span>
+
+<span class="code-tag">&lt;!-- Utilisation des composants AutoUI --&gt;</span>
+<span class="code-tag">&lt;ui-app-shell&gt;</span>
+  <span class="code-tag">&lt;ui-smart-form</span> <span class="code-attr">id</span>=<span class="code-str">"my-form"</span><span class="code-tag">&gt;</span>
+    <span class="code-tag">&lt;input</span> <span class="code-attr">type</span>=<span class="code-str">"text"</span> <span class="code-attr">name</span>=<span class="code-str">"user"</span> <span class="code-attr">placeholder</span>=<span class="code-str">"Nom"</span><span class="code-tag">&gt;</span>
+    <span class="code-tag">&lt;button</span> <span class="code-attr">type</span>=<span class="code-str">"submit"</span><span class="code-tag">&gt;</span>Valider<span class="code-tag">&lt;/button&gt;</span>
+  <span class="code-tag">&lt;/ui-smart-form&gt;</span>
+<span class="code-tag">&lt;/ui-app-shell&gt;</span></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       PAGE DOCUMENTATION (NOUVELLE PAGE)
+       ========================================================================== -->
+  <main id="doc-page" class="page-section hidden">
+    <div class="container doc-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="doc-sidebar">
+        <h3>Prise en main</h3>
+        <ul class="doc-menu">
+          <li><a href="#doc-intro" class="doc-link active">Introduction</a></li>
+          <li><a href="#doc-install" class="doc-link">Installation</a></li>
+          <li><a href="#doc-usage" class="doc-link">Utilisation Rapide</a></li>
+        </ul>
+
+        <h3>Composants</h3>
+        <ul class="doc-menu">
+          <li><a href="#doc-app-shell" class="doc-link">ui-app-shell</a></li>
+          <li><a href="#doc-smart-form" class="doc-link">ui-smart-form</a></li>
+        </ul>
+      </aside>
+
+      <!-- Main Doc Content -->
+      <article class="doc-content">
+        <section id="doc-intro">
+          <h1>Documentation AutoUI</h1>
+          <p>Bienvenue dans la documentation officielle d'AutoUI v10.0. AutoUI est un framework léger conçu pour accélérer le développement d'applications Web à l'aide des standard Web Components modernes.</p>
+          
+          <div class="doc-box">
+            <strong>Points Forts :</strong> Encapsulation CSS native via Shadow DOM, rendu ultra rapide, zéro configuration webpack ou build compliquée nécessaire.
+          </div>
+        </section>
+
+        <section id="doc-install">
+          <h2>Installation</h2>
+          <p>Pour intégrer AutoUI dans votre projet, insérez simplement la balise de script CDN suivante dans l'en-tête (<code>&lt;head&gt;</code>) de votre fichier HTML :</p>
+          
+          <div class="code-editor" style="margin-bottom: 1.5rem;">
+            <div class="editor-header">
+              <span class="editor-title">HTML</span>
+            </div>
+            <div class="code-content">
+              <pre><code><span class="code-tag">&lt;script</span> <span class="code-attr">src</span>=<span class="code-str">"https://cdn.jsdelivr.net/gh/autoui/autoui@v1.0.0/dist/autoui.min.js"</span> <span class="code-attr">defer</span><span class="code-tag">&gt;&lt;/script&gt;</span></code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="doc-usage">
+          <h2>Utilisation Rapide</h2>
+          <p>Une fois le script inclus, vous pouvez directement employer les balises personnalisées fournies par le framework dans le corps de votre document.</p>
+        </section>
+
+        <section id="doc-app-shell">
+          <h2>Composant &lt;ui-app-shell&gt;</h2>
+          <p>Le composant conteneur principal qui structure la mise en page générale de l'application et gère l'état global du thème.</p>
+        </section>
+
+        <section id="doc-smart-form">
+          <h2>Composant &lt;ui-smart-form&gt;</h2>
+          <p>Un formulaire intelligent réactif avec validation en temps réel automatique des champs de saisie.</p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3 style="color: var(--text-main); margin-bottom: 1rem;">AutoUI</h3>
+          <p>Le framework web JavaScript moderne, léger et sans dépendances.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Ressources</h4>
+          <ul>
+            <li><a class="nav-trigger" data-target="doc-page">Documentation</a></li>
+            <li><a class="nav-trigger" data-target="home-page" data-anchor="#demo">Exemples</a></li>
+            <li><a class="nav-trigger" data-target="home-page" data-anchor="#features">Composants</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Communauté</h4>
+          <ul>
+            <li><a href="#">GitHub</a></li>
+            <li><a href="#">Discord</a></li>
+            <li><a href="#">Twitter / X</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Légal</h4>
+          <ul>
+            <li><a href="#">Licence MIT</a></li>
+            <li><a href="#">Confidentialité</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 AutoUI Framework. Développé pour le Web Moderne.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS INTERACTIFS -->
+  <script>
+    // 1. Navigation SPA (Basculement entre Accueil et Documentation)
+    const navTriggers = document.querySelectorAll('.nav-trigger');
+    const pageSections = document.querySelectorAll('.page-section');
+
+    navTriggers.forEach(trigger => {
+      trigger.addEventListener('click', (e) => {
+        const targetPageId = trigger.getAttribute('data-target');
+        const anchor = trigger.getAttribute('data-anchor');
+
+        // Basculer l'affichage des pages
+        pageSections.forEach(page => {
+          if (page.id === targetPageId) {
+            page.classList.remove('hidden');
+          } else {
+            page.classList.add('hidden');
+          }
+        });
+
+        // Remonter en haut de page
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Si ancrage spécifique sur la page d'accueil
+        if (anchor && targetPageId === 'home-page') {
+          setTimeout(() => {
+            const element = document.querySelector(anchor);
+            if (element) element.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        }
+      });
+    });
+
+    // 2. Gestion du Thème Sombre / Clair
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const htmlElement = document.documentElement;
+
+    themeToggleBtn.addEventListener('click', () => {
+      const currentTheme = htmlElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      htmlElement.setAttribute('data-theme', newTheme);
+      themeToggleBtn.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+    });
+
+    // 3. Filtre Interactif des Fonctionnalités (Page d'accueil)
+    const filterBtns = document.querySelectorAll('.tab-btn');
+    const featureCards = document.querySelectorAll('.feature-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filterValue = btn.getAttribute('data-filter');
+
+        featureCards.forEach(card => {
+          if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // 4. Navigation interne dans la Documentation
+    const docLinks = document.querySelectorAll('.doc-link');
+    docLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        docLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
