@@ -811,7 +811,7 @@
         <section id="doc-intro">
           <h1>Documentation AutoUI</h1>
           <p>Bienvenue dans la documentation officielle d'AutoUI v10.0. AutoUI est un framework léger conçu pour accélérer le développement d'applications Web à l'aide des standards Web Components modernes.</p>
-          
+
           <div class="doc-box">
             <strong>Points Forts :</strong> Encapsulation CSS native via Shadow DOM, rendu ultra rapide, zéro configuration webpack ou build compliquée nécessaire.
           </div>
@@ -820,7 +820,7 @@
         <section id="doc-install">
           <h2>Installation</h2>
           <p>Pour intégrer AutoUI dans votre projet, insérez simplement la balise de script CDN suivante dans l'en-tête (<code>&lt;head&gt;</code>) de votre fichier HTML :</p>
-          
+
           <div class="code-editor" style="margin-bottom: 1.5rem;">
             <div class="editor-header">
               <span class="editor-title">HTML</span>
@@ -938,7 +938,7 @@
     themeToggleBtn.addEventListener('click', () => {
       const currentTheme = htmlElement.getAttribute('data-theme');
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      
+
       htmlElement.setAttribute('data-theme', newTheme);
       themeToggleBtn.textContent = newTheme === 'dark' ? '🌙' : '☀️';
     });
