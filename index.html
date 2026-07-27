@@ -8,6 +8,9 @@
     <!-- Script CDN officiel d'AutoUI -->
     <script src="https://cdn.jsdelivr.net/gh/marcisrael25/autoUI@main/autoui.min.js" defer></script>
 
+    <!-- Thème Prism.js (Dark Mode Okadia) pour la coloration syntaxique -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okadia.min.css">
+
     <style>
         /* ==========================================================================
            1. VARIABLES CSS ET RÉINITIALISATION GLOBAL
@@ -45,6 +48,22 @@
             color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
+        }
+
+        /* Overrides pour Prism.js pour garder le style sombre */
+        pre[class*="language-"] {
+            background: var(--code-bg) !important;
+            border: 1px solid var(--border-color) !important;
+            border-radius: 8px !important;
+            margin: 0 !important;
+            padding: 1.25rem !important;
+            font-family: var(--font-mono) !important;
+            font-size: 0.9rem !important;
+        }
+
+        code[class*="language-"] {
+            font-family: var(--font-mono) !important;
+            text-shadow: none !important;
         }
 
         /* ==========================================================================
@@ -252,22 +271,10 @@
             margin-top: 1rem;
         }
 
-        .code-block {
-            background-color: var(--code-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.25rem;
-            overflow-x: auto;
-            font-family: var(--font-mono);
-            font-size: 0.9rem;
-            color: var(--primary);
-            line-height: 1.5;
-        }
-
         .copy-btn {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 12px;
+            right: 12px;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             color: var(--text-muted);
@@ -276,6 +283,7 @@
             font-size: 0.75rem;
             cursor: pointer;
             transition: all 0.2s;
+            z-index: 10;
         }
 
         .copy-btn:hover {
@@ -325,33 +333,6 @@
             display: block;
         }
 
-        /* Formulaire stylisé d'exemple */
-        .custom-form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .custom-form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-main);
-            font-size: 0.9rem;
-        }
-
-        .custom-input {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: var(--code-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: var(--text-main);
-            font-family: var(--font-sans);
-        }
-
-        .custom-input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
         /* ==========================================================================
            7. PIED DE PAGE
            ========================================================================== */
@@ -369,7 +350,6 @@
             text-decoration: none;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.25rem; }
             .nav-links { display: none; }
@@ -379,9 +359,7 @@
 </head>
 <body>
 
-    <!-- ==========================================================================
-       BARRE DE NAVIGATION PRINCIPALE
-       ========================================================================== -->
+    <!-- NAV BAR -->
     <nav>
         <a href="#" class="logo">⚡ Auto<span>UI</span></a>
         <ul class="nav-links">
@@ -393,9 +371,7 @@
         </ul>
     </nav>
 
-    <!-- ==========================================================================
-       SECTION HERO / EN-TÊTE DU SITE
-       ========================================================================== -->
+    <!-- HERO SECTION -->
     <header class="hero">
         <span class="badge">v1.0.0 — Web Components Natifs[cite: 1]</span>
         <h1>Créez des interfaces modernes <span>sans configuration</span></h1>
@@ -408,9 +384,7 @@
 
     <main class="container">
         
-        <!-- ==========================================================================
-           SECTION 1 : FONCTIONNALITÉS CLÉS
-           ========================================================================== -->
+        <!-- FONCTIONNALITÉS -->
         <h2 id="features" class="section-title">Pourquoi adopter AutoUI ?</h2>
         <p class="section-subtitle">Développé pour la simplicité, la vitesse et l'élégance architecturale[cite: 1].</p>
 
@@ -447,25 +421,21 @@
             </div>
         </div>
 
-        <!-- ==========================================================================
-           SECTION 2 : INTÉGRATION VIA CDN
-           ========================================================================== -->
+        <!-- SECTION CDN -->
         <h2 id="cdn" class="section-title">Intégration CDN Directe</h2>
         <p class="section-subtitle">Copiez et collez cette balise dans le <code>&lt;head&gt;</code> de votre document HTML.</p>
 
         <div class="card" style="max-width: 850px; margin: 0 auto 4rem;">
             <h3>Lien CDN jsDelivr Réseau Officiel</h3>
-            <p>Ce lien charge directement la version optimisée et minifiée depuis le dépôt GitHub :</p>
+            <p style="margin-bottom: 1rem;">Ce lien charge directement la version optimisée et minifiée depuis le dépôt GitHub :</p>
             
             <div class="code-container">
                 <button class="copy-btn" onclick="copyCode('cdn-code')">Copier</button>
-                <pre class="code-block" id="cdn-code"><code>&lt;script src="https://cdn.jsdelivr.net/gh/marcisrael25/autoUI@main/autoui.min.js" defer&gt;&lt;/script&gt;</code></pre>
+                <pre class="language-html"><code id="cdn-code">&lt;script src="https://cdn.jsdelivr.net/gh/marcisrael25/autoUI@main/autoui.min.js" defer&gt;&lt;/script&gt;</code></pre>
             </div>
         </div>
 
-        <!-- ==========================================================================
-           SECTION 3 : EXEMPLES PRATIQUES DE CODE
-           ========================================================================== -->
+        <!-- EXEMPLES DE CODE AVEC COLORATION -->
         <h2 id="examples" class="section-title">Exemples de Code Pratiques</h2>
         <p class="section-subtitle">Découvrez la simplicité de mise en œuvre d'AutoUI.</p>
 
@@ -482,7 +452,7 @@
                 <p style="color: var(--text-muted); margin-bottom: 1rem;">Exemple de carte utilisateur personnalisée avec Shadow DOM encapsulé[cite: 1] :</p>
                 <div class="code-container">
                     <button class="copy-btn" onclick="copyCode('code-ex1')">Copier</button>
-                    <pre class="code-block" id="code-ex1"><code>import { AutoElement } from 'autoui-js';[cite: 1]
+                    <pre class="language-javascript"><code id="code-ex1">import { AutoElement } from 'autoui-js';[cite: 1]
 
 class UserCard extends AutoElement {[cite: 1]
     static get observedAttributes() {[cite: 1]
@@ -516,7 +486,7 @@ customElements.define('user-card', UserCard);[cite: 1]</code></pre>
                 <p style="color: var(--text-muted); margin-bottom: 1rem;">Mise à jour automatique de vos vues grâce aux proxys réactifs[cite: 1] :</p>
                 <div class="code-container">
                     <button class="copy-btn" onclick="copyCode('code-ex2')">Copier</button>
-                    <pre class="code-block" id="code-ex2"><code>import { createStore } from 'autoui-js';[cite: 1]
+                    <pre class="language-javascript"><code id="code-ex2">import { createStore } from 'autoui-js';[cite: 1]
 
 // 1. Initialisation du Store[cite: 1]
 export const store = createStore({[cite: 1]
@@ -540,7 +510,7 @@ store.counter += 1;[cite: 1]</code></pre>
                 <p style="color: var(--text-muted); margin-bottom: 1rem;">Interception dynamique de la soumission et validation[cite: 1] :</p>
                 <div class="code-container">
                     <button class="copy-btn" onclick="copyCode('code-ex3')">Copier</button>
-                    <pre class="code-block" id="code-ex3"><code>&lt;ui-smart-form id="myForm"&gt;[cite: 1]
+                    <pre class="language-html"><code id="code-ex3">&lt;ui-smart-form id="myForm"&gt;[cite: 1]
     &lt;input type="email" name="email" required placeholder="email@domaine.com" /&gt;[cite: 1]
     &lt;button type="submit"&gt;Envoyer&lt;/button&gt;[cite: 1]
 &lt;/ui-smart-form&gt;[cite: 1]
@@ -555,9 +525,7 @@ store.counter += 1;[cite: 1]</code></pre>
             </div>
         </div>
 
-        <!-- ==========================================================================
-           SECTION 4 : TABLEAU RÉFÉRENCE DE L'API
-           ========================================================================== -->
+        <!-- TABLEAU API -->
         <h2 id="docs" class="section-title">Référence de l'API</h2>
         <p class="section-subtitle">Liste des méthodes et des composants prêts à l'emploi[cite: 1].</p>
 
@@ -600,9 +568,7 @@ store.counter += 1;[cite: 1]</code></pre>
             </table>
         </div>
 
-        <!-- ==========================================================================
-           SECTION 5 : DÉMONSTRATEUR D'INTERACTIONS JS EN DIRECT
-           ========================================================================== -->
+        <!-- DEMO JS -->
         <h2 class="section-title">Testeur de Composant en Direct</h2>
         <p class="section-subtitle">Interagissez avec le widget réactif créé avec AutoUI.</p>
 
@@ -622,9 +588,7 @@ store.counter += 1;[cite: 1]</code></pre>
 
     </main>
 
-    <!-- ==========================================================================
-       FOOTER ET MENTIONS LÉGALES
-       ========================================================================== -->
+    <!-- FOOTER -->
     <footer>
         <p>&copy; 2026 AutoUI Framework. Conçu et développé par <a href="https://github.com/marcisrael25" target="_blank">Marc-Israël</a>[cite: 1].</p>
         <p style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">
@@ -632,11 +596,12 @@ store.counter += 1;[cite: 1]</code></pre>
         </p>
     </footer>
 
-    <!-- ==========================================================================
-       SCRIPTS JAVASCRIPT ET LOGIQUE D'INTERACTION DU SITE
-       ========================================================================== -->
+    <!-- Script Prism.js pour le parseur de syntaxe -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+
+    <!-- SCRIPTS INTERACTIFS -->
     <script>
-        // Logique pour la gestion des Onglets d'Exemples
         function switchTab(event, tabId) {
             const tabs = document.querySelectorAll('.tab-btn');
             const contents = document.querySelectorAll('.tab-content');
@@ -648,7 +613,6 @@ store.counter += 1;[cite: 1]</code></pre>
             document.getElementById(tabId).classList.add('active');
         }
 
-        // Fonction de copie du code CDN/Exemples
         function copyCode(elementId) {
             const codeText = document.getElementById(elementId).innerText;
             navigator.clipboard.writeText(codeText).then(() => {
@@ -666,17 +630,11 @@ store.counter += 1;[cite: 1]</code></pre>
             });
         }
 
-        // État dynamique local d'exemple
         let currentCount = 0;
         function updateCounter(val) {
             currentCount += val;
             document.getElementById('counterDisplay').innerText = currentCount;
         }
-
-        // Message de confirmation du chargement de la bibliothèque
-        window.addEventListener('DOMContentLoaded', () => {
-            console.log("Site vitrine d'AutoUI chargé avec succès.");
-        });
     </script>
 </body>
 </html>
