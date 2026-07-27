@@ -3,93 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoUI - Documentation & Démo</title>
+    <title>AutoUI - Framework UI Réactif & Web Components Natifs</title>
     
-    <!-- Intégration de ton CDN AutoUI -->
-    <script src="https://cdn.jsdelivr.net/gh/marcisrael25/autoUI@main/autoui.min.js"></script>
+    <!-- Script AutoUI via ton CDN jsDelivr -->
+    <script src="https://cdn.jsdelivr.net/gh/marcisrael25/autoUI@main/autoui.min.js" defer></script>
 
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent: #38bdf8;
-            --text-color: #f8fafc;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --border-color: #334155;
+            --primary: #38bdf8;
+            --primary-hover: #0284c7;
+            --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            --code-bg: #020617;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
             line-height: 1.6;
         }
 
-        header {
-            padding: 2rem 1rem;
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.9);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
             text-align: center;
-            border-bottom: 1px solid #334155;
-        }
-
-        h1 {
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-        }
-
-        .container {
+            padding: 5rem 1rem 4rem;
             max-width: 900px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            margin: 0 auto;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 0.35rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            margin-bottom: 1.25rem;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #0f172a;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+        }
+
+        /* Container & Cards */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
         }
 
         .card {
-            background-color: var(--card-bg);
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.75rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        .card-icon {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Section CDN & Code */
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border: 1px solid #334155;
-        }
-
-        code {
-            background-color: #020617;
-            color: var(--accent);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4rem;
-            font-family: monospace;
-        }
-
-        pre {
-            background-color: #020617;
-            padding: 1rem;
-            border-radius: 6px;
+            padding: 1.25rem;
             overflow-x: auto;
-            color: #e2e8f0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            color: var(--primary);
+            margin-top: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 2.25rem; }
+            .cta-buttons { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>AutoUI Framework</h1>
-        <p>Bibliothèque UI réactive et déclarative</p>
+    <!-- Barre de Navigation -->
+    <nav>
+        <a href="#" class="logo">⚡ AutoUI</a>
+        <ul class="nav-links">
+            <li><a href="#features">Fonctionnalités</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#demo">Démo</a></li>
+            <li><a href="https://github.com/marcisrael25/autoUI" target="_blank">GitHub</a></li>
+        </ul>
+    </nav>
+
+    <!-- En-tête / Hero Section -->
+    <header class="hero">
+        <span class="badge">v1.0.0 — Web Components Natifs</span>
+        <h1>Concevez des interfaces réactives <span>sans configuration</span></h1>
+        <p>AutoUI est un framework JavaScript UI modulaire, ultra-léger et autonome, conçu sans dépendances tierces ni étape de build obligatoire.</p>
+        <div class="cta-buttons">
+            <a href="#installation" class="btn btn-primary">Démarrer via CDN</a>
+            <a href="https://github.com/marcisrael25/autoUI" target="_blank" class="btn btn-secondary">Voir sur GitHub</a>
+        </div>
     </header>
 
-    <div class="container">
-        <div class="card">
-            <h2>Installation via CDN</h2>
-            <p>Ajoute simplement cette ligne dans le <code>&lt;head&gt;</code> de tes pages HTML :</p>
-            <pre><code>&lt;script src="https://cdn.jsdelivr.net/gh/marcisrael25/autoUI@main/autoui.min.js"&gt;&lt;/script&gt;</code></pre>
-        </div>
-
-        <div class="card">
-            <h2>Espace de démonstration</h2>
-            <!-- Tes composants AutoUI ici -->
-            <div id="app">
-                <p>AutoUI est chargé et prêt à être utilisé !</p>
+    <main class="container">
+        
+        <!-- Section Fonctionnalités -->
+        <h2 id="features" class="section-title">Pourquoi choisir AutoUI ?</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon">⚡</div>
+                <h3>Zero Build Required</h3>
+                <p>Incorporez-le directement via une simple balise <code>&lt;script&gt;</code> dans votre fichier HTML. Aucun outil comme Vite ou Webpack n'est exigé.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔒</div>
+                <h3>Shadow DOM Encapsulé</h3>
+                <p>Chaque composant conserve ses styles CSS isolés pour éviter toute interférence de style avec le reste du document.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔄</div>
+                <h3>Réactivité Granulaire</h3>
+                <p>Met à jour l'interface utilisateur instantanément et de façon ciblée lors de toute modification d'état.</p>
             </div>
         </div>
-    </div>
+
+        <!-- Section Intégration CDN -->
+        <h2 id="installation" class="section-title">Installation Rapide</h2>
+        <div class="card" style="max-width: 800px; margin: 0 auto;">
+            <h3>Importation direct via CDN</h3>
+            <p>Ajoutez la balise suivante à votre document HTML pour utiliser la dernière version buildée d'AutoUI :</p>
+            <pre class="code-block"><code>&lt;script src="https://cdn.jsdelivr.net/gh/marcisrael25/autoUI@main/autoui.min.js" defer&gt;&lt;/script&gt;</code></pre>
+        </div>
+
+        <!-- Section Démo / Composants -->
+        <h2 id="demo" class="section-title" style="margin-top: 4rem;">Démonstration en Direct</h2>
+        <ui-app-shell theme="dark">
+            <div class="card" style="text-align: center; padding: 3rem 1rem;">
+                <h3 style="color: var(--primary); margin-bottom: 1rem;">Composant Réactif AutoUI</h3>
+                <p style="margin-bottom: 1.5rem;">Votre script CDN <code>autoui.min.js</code> est chargé et opérationnel sur cette page.</p>
+                <ui-smart-form id="demoForm">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Prêt pour intégrer vos éléments <code>&lt;ui-smart-form&gt;</code> ou <code>&lt;ui-data-table&gt;</code>.</p>
+                </ui-smart-form>
+            </div>
+        </ui-app-shell>
+
+    </main>
+
+    <!-- Pied de Page -->
+    <footer>
+        <p>&copy; 2026 AutoUI Framework — Distribué sous licence MIT par Marc-Israël[cite: 1].</p>
+    </footer>
 
 </body>
 </html>
