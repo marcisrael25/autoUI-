@@ -3,33 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoUI - Framework UI Réactif & Web Components Natifs</title>
+    <title>AutoUI - Framework UI Réactif 3D</title>
     
-    <!-- Script CDN officiel d'AutoUI -->
+    <!-- Script CDN officiel AutoUI -->
     <script src="https://cdn.jsdelivr.net/gh/marcisrael25/autoUI@main/autoui.min.js" defer></script>
-
-    <!-- Thème Prism.js (Dark Mode Okadia) pour la coloration syntaxique -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okadia.min.css">
 
     <style>
         /* ==========================================================================
-           1. VARIABLES CSS ET RÉINITIALISATION GLOBAL
+           1. PALETTE DE COULEURS & VARIABLES 3D
            ========================================================================== */
         :root {
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --bg-card-hover: #26334d;
-            --border-color: #334155;
-            --primary: #38bdf8;
-            --primary-hover: #0284c7;
-            --secondary: #818cf8;
-            --accent: #f43f5e;
+            --bg-dark: #0a0f1d;
+            --bg-card: rgba(18, 25, 44, 0.7);
+            --border-glow: rgba(255, 255, 255, 0.08);
+            
+            /* Tes couleurs principales */
+            --color-blue: #00d2ff;
+            --color-red: #ff3366;
+            --color-orange: #ff9900;
+            
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --code-bg: #020617;
-            --success: #22c55e;
-            --font-mono: 'Fira Code', 'Courier New', Courier, monospace;
-            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --code-bg: #050811;
+            --font-mono: 'Fira Code', 'Courier New', monospace;
+            --font-sans: system-ui, -apple-system, sans-serif;
         }
 
         * {
@@ -48,113 +45,113 @@
             color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
-        }
-
-        /* Overrides pour Prism.js pour garder le style sombre */
-        pre[class*="language-"] {
-            background: var(--code-bg) !important;
-            border: 1px solid var(--border-color) !important;
-            border-radius: 8px !important;
-            margin: 0 !important;
-            padding: 1.25rem !important;
-            font-family: var(--font-mono) !important;
-            font-size: 0.9rem !important;
-        }
-
-        code[class*="language-"] {
-            font-family: var(--font-mono) !important;
-            text-shadow: none !important;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 51, 102, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 153, 0, 0.05) 0%, transparent 60%);
+            background-attachment: fixed;
         }
 
         /* ==========================================================================
-           2. BARRE DE NAVIGATION
+           2. COLORATION SYNTAXIQUE (Bleu, Rouge, Orange)
+           ========================================================================== */
+        .token-keyword { color: var(--color-red); font-weight: bold; }       /* import, class, const, return */
+        .token-function { color: var(--color-blue); }                        /* define, createStore, render */
+        .token-string { color: var(--color-orange); }                        /* "dark", 'autoui-js', 'name' */
+        .token-tag { color: var(--color-red); }                              /* <ui-smart-form>, <input> */
+        .token-attr { color: var(--color-orange); }                          /* theme=, type=, required */
+        .token-comment { color: #5c677d; font-style: italic; }               /* // Commentaires */
+        .token-operator { color: var(--color-blue); }                        /* =, =>, +, : */
+
+        /* ==========================================================================
+           3. NAVBAR & GLASSMORPHISM
            ========================================================================== */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1.25rem 2rem;
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid var(--border-glow);
+            background: rgba(10, 15, 29, 0.8);
             position: sticky;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
         }
 
         .logo {
             font-size: 1.5rem;
             font-weight: 800;
-            color: var(--primary);
+            color: var(--color-blue);
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-        }
-
-        .logo span {
-            color: var(--text-main);
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
         }
 
         .nav-links {
             display: flex;
             gap: 1.5rem;
             list-style: none;
-            align-items: center;
         }
 
         .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.2s;
+            transition: all 0.3s;
         }
 
         .nav-links a:hover {
-            color: var(--primary);
+            color: var(--color-orange);
+            text-shadow: 0 0 8px rgba(255, 153, 0, 0.6);
         }
 
         /* ==========================================================================
-           3. HERO SECTION
+           4. HERO SECTION 3D & ANIMATIONS
            ========================================================================== */
         .hero {
             text-align: center;
-            padding: 6rem 1rem 4rem;
-            max-width: 900px;
+            padding: 7rem 1rem 5rem;
+            max-width: 950px;
             margin: 0 auto;
-            position: relative;
+            perspective: 1000px;
         }
 
-        .badge {
+        .hero-badge {
             display: inline-block;
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--primary);
-            border: 1px solid rgba(56, 189, 248, 0.3);
+            background: linear-gradient(90deg, rgba(255,51,102,0.15), rgba(255,153,0,0.15));
+            border: 1px solid var(--color-orange);
+            color: var(--color-orange);
             padding: 0.4rem 1.2rem;
             border-radius: 9999px;
-            font-size: 0.875rem;
+            font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
+            box-shadow: 0 0 15px rgba(255, 153, 0, 0.2);
+            animation: pulse 3s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 153, 0, 0.2); }
+            100% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 51, 102, 0.4); }
         }
 
         .hero h1 {
-            font-size: 3.2rem;
+            font-size: 3.5rem;
             font-weight: 800;
-            letter-spacing: -0.025em;
-            margin-bottom: 1.25rem;
-            line-height: 1.2;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
         }
 
-        .hero h1 span {
-            color: var(--primary);
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        .text-blue { color: var(--color-blue); text-shadow: 0 0 15px rgba(0, 210, 255, 0.4); }
+        .text-red { color: var(--color-red); text-shadow: 0 0 15px rgba(255, 51, 102, 0.4); }
+        .text-orange { color: var(--color-orange); text-shadow: 0 0 15px rgba(255, 153, 0, 0.4); }
 
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             color: var(--text-muted);
             margin-bottom: 2.5rem;
             max-width: 750px;
@@ -162,427 +159,357 @@
             margin-right: auto;
         }
 
-        .cta-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 0.8rem 1.75rem;
-            border-radius: 8px;
-            font-weight: 600;
+        .btn-3d {
+            padding: 0.85rem 2rem;
+            border-radius: 10px;
+            font-weight: 700;
             text-decoration: none;
-            transition: all 0.2s ease-in-out;
+            display: inline-block;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
             border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
+            margin: 0.5rem;
         }
 
-        .btn-primary {
-            background-color: var(--primary);
-            color: #0f172a;
+        .btn-blue {
+            background: linear-gradient(135deg, var(--color-blue), #0088ff);
+            color: #000;
+            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.3), inset 0 2px 0 rgba(255,255,255,0.4);
         }
 
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
+        .btn-blue:hover {
+            transform: translateY(-5px) rotateX(10deg);
+            box-shadow: 0 15px 25px rgba(0, 210, 255, 0.5);
         }
 
-        .btn-secondary {
-            background-color: var(--bg-card);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
+        .btn-red {
+            background: linear-gradient(135deg, var(--color-red), #cc0033);
+            color: #fff;
+            box-shadow: 0 10px 20px rgba(255, 51, 102, 0.3), inset 0 2px 0 rgba(255,255,255,0.3);
         }
 
-        .btn-secondary:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
+        .btn-red:hover {
+            transform: translateY(-5px) rotateX(10deg);
+            box-shadow: 0 15px 25px rgba(255, 51, 102, 0.5);
         }
 
         /* ==========================================================================
-           4. CONTENEURS ET GRILLES
+           5. CARTES EFFET 3D TILT
            ========================================================================== */
         .container {
-            max-width: 1100px;
+            max-width: 1150px;
             margin: 0 auto;
-            padding: 3rem 1rem;
+            padding: 2rem 1rem;
         }
 
         .section-title {
             text-align: center;
             font-size: 2.2rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: var(--text-muted);
             margin-bottom: 3rem;
-            font-size: 1.05rem;
+            font-weight: 800;
         }
 
-        .grid {
+        .grid-3d {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 4rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            perspective: 1000px;
+            margin-bottom: 5rem;
         }
 
-        .card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.75rem;
-            transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
+        .card-3d {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
         }
 
-        .card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(56, 189, 248, 0.4);
-            background-color: var(--bg-card-hover);
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(-5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
         }
+
+        .card-3d.border-blue:hover { border-color: var(--color-blue); box-shadow: 0 10px 30px rgba(0, 210, 255, 0.2); }
+        .card-3d.border-red:hover { border-color: var(--color-red); box-shadow: 0 10px 30px rgba(255, 51, 102, 0.2); }
+        .card-3d.border-orange:hover { border-color: var(--color-orange); box-shadow: 0 10px 30px rgba(255, 153, 0, 0.2); }
 
         .card-icon {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 1rem;
+            transform: translateZ(30px);
         }
 
-        .card h3 {
-            margin-bottom: 0.5rem;
-            color: var(--text-main);
-            font-size: 1.25rem;
+        .card-3d h3 {
+            font-size: 1.35rem;
+            margin-bottom: 0.75rem;
+            transform: translateZ(20px);
         }
 
-        .card p {
+        .card-3d p {
             color: var(--text-muted);
             font-size: 0.95rem;
+            transform: translateZ(10px);
         }
 
         /* ==========================================================================
-           5. BLOCS DE CODE ET CDN
+           6. BLOCS DE CODE ET COLORATION
            ========================================================================== */
-        .code-container {
+        .code-box {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            overflow-x: auto;
             position: relative;
-            margin-top: 1rem;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+            line-height: 1.6;
         }
 
         .copy-btn {
             position: absolute;
             top: 12px;
             right: 12px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
             font-size: 0.75rem;
             cursor: pointer;
             transition: all 0.2s;
-            z-index: 10;
         }
 
         .copy-btn:hover {
-            color: var(--text-main);
-            border-color: var(--primary);
+            background: var(--color-blue);
+            color: #000;
         }
 
         /* ==========================================================================
-           6. COMPOSANTS DÉMO INTERACTIFS
+           7. COMPOSANTS INTERACTIFS AUTOUI DÉMO
            ========================================================================== */
-        .demo-box {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 3rem;
+        .demo-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 4rem;
+            backdrop-filter: blur(10px);
         }
 
-        .demo-tabs {
-            display: flex;
-            gap: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 1.5rem;
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
         }
 
-        .tab-btn {
-            padding: 0.5rem 1rem;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-weight: 600;
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s;
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 2.5rem; }
+            .demo-grid { grid-template-columns: 1fr; }
         }
 
-        .tab-btn.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* ==========================================================================
-           7. PIED DE PAGE
-           ========================================================================== */
+        /* Footer */
         footer {
             text-align: center;
-            padding: 4rem 1rem 3rem;
-            border-top: 1px solid var(--border-color);
+            padding: 3rem 1rem;
+            border-top: 1px solid var(--border-glow);
             color: var(--text-muted);
             font-size: 0.9rem;
-            background-color: rgba(2, 6, 23, 0.5);
-        }
-
-        footer a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.25rem; }
-            .nav-links { display: none; }
-            .cta-buttons { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
-    <!-- NAV BAR -->
+    <!-- NAVBAR -->
     <nav>
-        <a href="#" class="logo">⚡ Auto<span>UI</span></a>
+        <a href="#" class="logo">⚡ AutoUI</a>
         <ul class="nav-links">
-            <li><a href="#features">Fonctionnalités</a></li>
+            <li><a href="#features">Avantages</a></li>
             <li><a href="#cdn">CDN</a></li>
-            <li><a href="#examples">Exemples</a></li>
-            <li><a href="#docs">API</a></li>
-            <li><a href="https://github.com/marcisrael25/autoUI" target="_blank" class="btn btn-secondary" style="padding: 0.4rem 0.9rem;">GitHub</a></li>
+            <li><a href="#examples">Démos & Code</a></li>
+            <li><a href="https://github.com/marcisrael25/autoUI" target="_blank">GitHub</a></li>
         </ul>
     </nav>
 
-    <!-- HERO SECTION -->
+    <!-- HERO SECTION 3D -->
     <header class="hero">
-        <span class="badge">v1.0.0 — Web Components Natifs[cite: 1]</span>
-        <h1>Créez des interfaces modernes <span>sans configuration</span></h1>
-        <p>AutoUI est un framework UI JavaScript réactif, autonome et ultra-léger, fonctionnant sans dépendances tierces et sans étape de build obligatoire[cite: 1].</p>
-        <div class="cta-buttons">
-            <a href="#cdn" class="btn btn-primary">Démarrer avec CDN</a>
-            <a href="#examples" class="btn btn-secondary">Voir les Exemples</a>
+        <div class="hero-badge">v1.0.0 — Zero Build & 100% Web Standards[cite: 1]</div>
+        <h1>Développez des interfaces <br>
+            <span class="text-blue">Réactives</span>, 
+            <span class="text-red">Rapides</span> & 
+            <span class="text-orange">3D Native</span>
+        </h1>
+        <p>AutoUI est un framework UI JavaScript autonome et ultra-léger, créé pour construire des applications modernes sans dépendance ni étape de compilation complexe[cite: 1].</p>
+        
+        <div>
+            <a href="#cdn" class="btn-3d btn-blue">Installer via CDN</a>
+            <a href="#examples" class="btn-3d btn-red">Voir les exemples</a>
         </div>
     </header>
 
     <main class="container">
-        
-        <!-- FONCTIONNALITÉS -->
-        <h2 id="features" class="section-title">Pourquoi adopter AutoUI ?</h2>
-        <p class="section-subtitle">Développé pour la simplicité, la vitesse et l'élégance architecturale[cite: 1].</p>
 
-        <div class="grid">
-            <div class="card">
+        <!-- CARTES DE FONCTIONNALITÉS 3D -->
+        <h2 id="features" class="section-title">Pourquoi adopter <span class="text-blue">AutoUI</span> ?</h2>
+        
+        <div class="grid-3d">
+            <div class="card-3d border-blue">
                 <div class="card-icon">⚡</div>
-                <h3>Zero Build Required[cite: 1]</h3>
-                <p>Pas besoin de Webpack, Vite ou Babel[cite: 1]. Importez simplement la bibliothèque avec un seul tag CDN dans votre fichier HTML[cite: 1].</p>
+                <h3 class="text-blue">Zero Build Required[cite: 1]</h3>
+                <p>Pas de Webpack, Vite ou Babel[cite: 1]. Ajoutez la balise CDN et votre application est immédiatement prête à fonctionner[cite: 1].</p>
             </div>
-            <div class="card">
+
+            <div class="card-3d border-red">
                 <div class="card-icon">🔒</div>
-                <h3>Encapsulation Shadow DOM[cite: 1]</h3>
-                <p>Tous vos composants disposent de leurs propres styles CSS isolés pour éviter tout conflit avec vos styles globaux[cite: 1].</p>
+                <h3 class="text-red">Shadow DOM Isolé[cite: 1]</h3>
+                <p>Vos composants possèdent leurs propres styles CSS isolés pour éviter toute interférence de style[cite: 1].</p>
             </div>
-            <div class="card">
+
+            <div class="card-3d border-orange">
                 <div class="card-icon">🔄</div>
-                <h3>Réactivité Granulaire[cite: 1]</h3>
-                <p>L'interface graphique est automatiquement mise à jour au moment précis où l'état interne de vos données change[cite: 1].</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">📦</div>
-                <h3>Empreinte Minimale[cite: 1]</h3>
-                <p>Un coût de bundle ultra-réduit (~40 kB non gzippé) pour un chargement immédiat et une exécution ultra-rapide[cite: 1].</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">🛠️</div>
-                <h3>Store Réactif Intégré[cite: 1]</h3>
-                <p>Gérez l'état global de votre application simplement avec le système de Store basé sur les Proxies ES6[cite: 1].</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">🌐</div>
-                <h3>100% Web Standards[cite: 1]</h3>
-                <p>Bâti nativement sur l'API officielle Web Components (Custom Elements, Shadow DOM, HTML Templates)[cite: 1].</p>
+                <h3 class="text-orange">State Store Réactif[cite: 1]</h3>
+                <p>Gestionnaire d'état natif basé sur les Proxies ES6 pour une synchronisation granulaire et automatique des données[cite: 1].</p>
             </div>
         </div>
 
         <!-- SECTION CDN -->
-        <h2 id="cdn" class="section-title">Intégration CDN Directe</h2>
-        <p class="section-subtitle">Copiez et collez cette balise dans le <code>&lt;head&gt;</code> de votre document HTML.</p>
-
-        <div class="card" style="max-width: 850px; margin: 0 auto 4rem;">
-            <h3>Lien CDN jsDelivr Réseau Officiel</h3>
-            <p style="margin-bottom: 1rem;">Ce lien charge directement la version optimisée et minifiée depuis le dépôt GitHub :</p>
+        <h2 id="cdn" class="section-title">Intégration <span class="text-orange">CDN</span> Directe</h2>
+        
+        <div class="card-3d border-orange" style="max-width: 850px; margin: 0 auto 5rem;">
+            <h3>Intégration HTML Rapide</h3>
+            <p style="margin-bottom: 1rem;">Ajoutez cette ligne dans le <code>&lt;head&gt;</code> de votre fichier HTML :</p>
             
-            <div class="code-container">
-                <button class="copy-btn" onclick="copyCode('cdn-code')">Copier</button>
-                <pre class="language-html"><code id="cdn-code">&lt;script src="https://cdn.jsdelivr.net/gh/marcisrael25/autoUI@main/autoui.min.js" defer&gt;&lt;/script&gt;</code></pre>
+            <div class="code-box">
+                <button class="copy-btn" onclick="copyCode('cdn-script')">Copier</button>
+                <code id="cdn-script">
+                    <span class="token-tag">&lt;script</span> <span class="token-attr">src</span>=<span class="token-string">"https://cdn.jsdelivr.net/gh/marcisrael25/autoUI@main/autoui.min.js"</span> <span class="token-attr">defer</span><span class="token-tag">&gt;&lt;/script&gt;</span>
+                </code>
             </div>
         </div>
 
-        <!-- EXEMPLES DE CODE AVEC COLORATION -->
-        <h2 id="examples" class="section-title">Exemples de Code Pratiques</h2>
-        <p class="section-subtitle">Découvrez la simplicité de mise en œuvre d'AutoUI.</p>
+        <!-- EXEMPLES D'UTILISATION AUTOUI ET COLORATION SYNTAXIQUE -->
+        <h2 id="examples" class="section-title">Exemples Pratiques d'Utilisation</h2>
 
-        <div class="demo-box">
-            <div class="demo-tabs">
-                <button class="tab-btn active" onclick="switchTab(event, 'ex1')">1. Composant Custom[cite: 1]</button>
-                <button class="tab-btn" onclick="switchTab(event, 'ex2')">2. Store Réactif[cite: 1]</button>
-                <button class="tab-btn" onclick="switchTab(event, 'ex3')">3. Formulaire Smart[cite: 1]</button>
-            </div>
+        <!-- EXEMPLE 1 : WEB COMPONENT CUSTOM -->
+        <div class="demo-section">
+            <div class="demo-grid">
+                <div>
+                    <h3 class="text-blue" style="margin-bottom: 0.5rem;">1. Web Component Personnalisé[cite: 1]</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                        Étendez la classe <code>AutoElement</code> pour fabriquer des composants encapsulés réactifs[cite: 1].
+                    </p>
+                    <div class="code-box">
+                        <button class="copy-btn" onclick="copyCode('code-1')">Copier</button>
+                        <pre id="code-1"><code><span class="token-keyword">import</span> { <span class="token-function">AutoElement</span> } <span class="token-keyword">from</span> <span class="token-string">'autoui-js'</span>;[cite: 1]
 
-            <!-- TAB 1 : COMPOSANT PERSONALISÉ -->
-            <div id="ex1" class="tab-content active">
-                <h3>Créer un Web Component avec AutoElement[cite: 1]</h3>
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">Exemple de carte utilisateur personnalisée avec Shadow DOM encapsulé[cite: 1] :</p>
-                <div class="code-container">
-                    <button class="copy-btn" onclick="copyCode('code-ex1')">Copier</button>
-                    <pre class="language-javascript"><code id="code-ex1">import { AutoElement } from 'autoui-js';[cite: 1]
-
-class UserCard extends AutoElement {[cite: 1]
-    static get observedAttributes() {[cite: 1]
-        return ['name', 'role'];[cite: 1]
-    }[cite: 1]
-
-    render() {[cite: 1]
-        const name = this.getAttribute('name') || 'Invité';[cite: 1]
-        const role = this.getAttribute('role') || 'Membre';[cite: 1]
-
-        return `[cite: 1]
-            &lt;style&gt;[cite: 1]
-                :host { display: block; padding: 12px; background: #1e293b; border-radius: 8px; }[cite: 1]
-                .title { color: #38bdf8; font-weight: bold; }[cite: 1]
-            &lt;/style&gt;[cite: 1]
-            &lt;div class="user"&gt;[cite: 1]
-                &lt;div class="title"&gt;${name}&lt;/div&gt;[cite: 1]
-                &lt;small&gt;${role}&lt;/small&gt;[cite: 1]
-            &lt;/div&gt;[cite: 1]
-        `;[cite: 1]
+<span class="token-keyword">class</span> <span class="token-function">UserCard</span> <span class="token-keyword">extends</span> <span class="token-function">AutoElement</span> {[cite: 1]
+    <span class="token-keyword">render</span>() {[cite: 1]
+        <span class="token-keyword">const</span> name = <span class="token-keyword">this</span>.getAttribute(<span class="token-string">'name'</span>) || <span class="token-string">'Membre'</span>;[cite: 1]
+        <span class="token-keyword">return</span> <span class="token-string">`
+            &lt;style&gt;
+                :host { display: block; padding: 15px; background: #12192c; border-radius: 8px; }
+                .name { color: #00d2ff; font-weight: bold; }
+            &lt;/style&gt;
+            &lt;div class="name"&gt;${name}&lt;/div&gt;
+        `</span>;[cite: 1]
     }[cite: 1]
 }[cite: 1]
 
-customElements.define('user-card', UserCard);[cite: 1]</code></pre>
+customElements.<span class="token-function">define</span>(<span class="token-string">'user-card'</span>, UserCard);[cite: 1]</code></pre>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card-3d border-blue" style="text-align: center;">
+                        <h4 class="text-blue" style="margin-bottom: 1rem;">Rendu du Composant AutoUI</h4>
+                        <!-- Rendu interactif via AutoUI -->
+                        <ui-app-shell theme="dark">
+                            <div style="background: rgba(0,210,255,0.1); border: 1px solid var(--color-blue); padding: 1rem; border-radius: 8px;">
+                                <strong class="text-blue">Aperçu dynamique</strong>
+                                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 5rem;">Encapsulation Shadow DOM active[cite: 1].</p>
+                            </div>
+                        </ui-app-shell>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- TAB 2 : STORE RÉACTIF -->
-            <div id="ex2" class="tab-content">
-                <h3>Gestionnaire d'État (State Store)[cite: 1]</h3>
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">Mise à jour automatique de vos vues grâce aux proxys réactifs[cite: 1] :</p>
-                <div class="code-container">
-                    <button class="copy-btn" onclick="copyCode('code-ex2')">Copier</button>
-                    <pre class="language-javascript"><code id="code-ex2">import { createStore } from 'autoui-js';[cite: 1]
+        <!-- EXEMPLE 2 : FORMULAIRE INTELLIGENT -->
+        <div class="demo-section">
+            <div class="demo-grid">
+                <div>
+                    <h3 class="text-red" style="margin-bottom: 0.5rem;">2. Formulaire Dynamique &lt;ui-smart-form&gt;[cite: 1]</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                        Gestion automatique de la validation et des événements de soumission[cite: 1].
+                    </p>
+                    <div class="code-box">
+                        <button class="copy-btn" onclick="copyCode('code-2')">Copier</button>
+                        <pre id="code-2"><code><span class="token-tag">&lt;ui-smart-form</span> <span class="token-attr">id</span>=<span class="token-string">"loginForm"</span><span class="token-tag">&gt;</span>[cite: 1]
+    <span class="token-tag">&lt;input</span> <span class="token-attr">type</span>=<span class="token-string">"email"</span> <span class="token-attr">name</span>=<span class="token-string">"email"</span> <span class="token-attr">required</span> <span class="token-tag">/&gt;</span>[cite: 1]
+    <span class="token-tag">&lt;button</span> <span class="token-attr">type</span>=<span class="token-string">"submit"</span><span class="token-tag">&gt;</span>Connexion<span class="token-tag">&lt;/button&gt;</span>[cite: 1]
+<span class="token-tag">&lt;/ui-smart-form&gt;</span>[cite: 1]
 
-// 1. Initialisation du Store[cite: 1]
-export const store = createStore({[cite: 1]
-    counter: 0,[cite: 1]
-    theme: 'dark'[cite: 1]
-});[cite: 1]
-
-// 2. Écouter les mises à jour[cite: 1]
-store.subscribe('counter', (newValue) => {[cite: 1]
-    console.log(`Compteur mis à jour : ${newValue}`);[cite: 1]
-});[cite: 1]
-
-// 3. Modifier la valeur (UI synchronisée automatiquement)[cite: 1]
-store.counter += 1;[cite: 1]</code></pre>
-                </div>
-            </div>
-
-            <!-- TAB 3 : FORMULAIRE INTELLIGENT -->
-            <div id="ex3" class="tab-content">
-                <h3>Utilisation de &lt;ui-smart-form&gt;[cite: 1]</h3>
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">Interception dynamique de la soumission et validation[cite: 1] :</p>
-                <div class="code-container">
-                    <button class="copy-btn" onclick="copyCode('code-ex3')">Copier</button>
-                    <pre class="language-html"><code id="code-ex3">&lt;ui-smart-form id="myForm"&gt;[cite: 1]
-    &lt;input type="email" name="email" required placeholder="email@domaine.com" /&gt;[cite: 1]
-    &lt;button type="submit"&gt;Envoyer&lt;/button&gt;[cite: 1]
-&lt;/ui-smart-form&gt;[cite: 1]
-
-&lt;script&gt;[cite: 1]
-    const form = document.querySelector('#myForm');[cite: 1]
-    form.addEventListener('formSubmit', (e) => {[cite: 1]
-        console.log('Données du formulaire :', e.detail);[cite: 1]
+<span class="token-tag">&lt;script&gt;</span>
+    <span class="token-keyword">const</span> form = document.querySelector(<span class="token-string">'#loginForm'</span>);[cite: 1]
+    form.addEventListener(<span class="token-string">'formSubmit'</span>, (e) =<span class="token-operator">&gt;</span> {[cite: 1]
+        console.log(<span class="token-string">'Données :'</span>, e.detail);[cite: 1]
     });[cite: 1]
-&lt;/script&gt;[cite: 1]</code></pre>
+<span class="token-tag">&lt;/script&gt;</span></code></pre>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card-3d border-red">
+                        <h4 class="text-red" style="margin-bottom: 1rem; text-align: center;">Test de Formulaire AutoUI</h4>
+                        <ui-smart-form id="demoForm">
+                            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <input type="email" placeholder="Entrez votre email" style="padding: 0.75rem; background: var(--code-bg); border: 1px solid var(--border-glow); border-radius: 6px; color: #fff;">
+                                <button type="button" class="btn-3d btn-red" style="margin: 0;" onclick="alert('Formulaire AutoUI soumis avec succès !')">Envoyer</button>
+                            </div>
+                        </ui-smart-form>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- TABLEAU API -->
-        <h2 id="docs" class="section-title">Référence de l'API</h2>
-        <p class="section-subtitle">Liste des méthodes et des composants prêts à l'emploi[cite: 1].</p>
+        <!-- EXEMPLE 3 : STORE RÉACTIF (ORANGE) -->
+        <div class="demo-section">
+            <div class="demo-grid">
+                <div>
+                    <h3 class="text-orange" style="margin-bottom: 0.5rem;">3. Gestionnaire d'État (Store Réactif)[cite: 1]</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                        Synchronisez vos données sur l'ensemble de votre interface graphique grâce à <code>createStore</code>[cite: 1].
+                    </p>
+                    <div class="code-box">
+                        <button class="copy-btn" onclick="copyCode('code-3')">Copier</button>
+                        <pre id="code-3"><code><span class="token-keyword">import</span> { <span class="token-function">createStore</span> } <span class="token-keyword">from</span> <span class="token-string">'autoui-js'</span>;[cite: 1]
 
-        <div class="card" style="overflow-x: auto; margin-bottom: 4rem;">
-            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
-                <thead>
-                    <tr style="border-bottom: 1px solid var(--border-color); color: var(--primary);">
-                        <th style="padding: 0.75rem;">Balise / Méthode</th>
-                        <th style="padding: 0.75rem;">Description</th>
-                        <th style="padding: 0.75rem;">Utilisation</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr style="border-bottom: 1px solid var(--border-color);">
-                        <td style="padding: 0.75rem;"><code>&lt;ui-app-shell&gt;</code>[cite: 1]</td>
-                        <td style="padding: 0.75rem;">Conteneur principal gérant le layout et les thèmes[cite: 1].</td>
-                        <td style="padding: 0.75rem;"><code>theme="dark|light"</code>[cite: 1]</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-color);">
-                        <td style="padding: 0.75rem;"><code>&lt;ui-smart-form&gt;</code>[cite: 1]</td>
-                        <td style="padding: 0.75rem;">Formulaire réactif avec validation en temps réel[cite: 1].</td>
-                        <td style="padding: 0.75rem;"><code>action="/api/send"</code>[cite: 1]</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-color);">
-                        <td style="padding: 0.75rem;"><code>&lt;ui-data-table&gt;</code>[cite: 1]</td>
-                        <td style="padding: 0.75rem;">Tableau de données avec tri et pagination[cite: 1].</td>
-                        <td style="padding: 0.75rem;"><code>sortable page-size="10"</code>[cite: 1]</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid var(--border-color);">
-                        <td style="padding: 0.75rem;"><code>AutoElement</code>[cite: 1]</td>
-                        <td style="padding: 0.75rem;">Classe de base pour définir un nouveau composant[cite: 1].</td>
-                        <td style="padding: 0.75rem;"><code>class MonComp extends AutoElement</code>[cite: 1]</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 0.75rem;"><code>createStore()</code>[cite: 1]</td>
-                        <td style="padding: 0.75rem;">Initialise un store de données réactif[cite: 1].</td>
-                        <td style="padding: 0.75rem;"><code>const store = createStore({...})</code>[cite: 1]</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<span class="token-comment">// Initialisation du Store Réactif</span>
+<span class="token-keyword">const</span> store = <span class="token-function">createStore</span>({ count: <span class="token-string">0</span> });[cite: 1]
 
-        <!-- DEMO JS -->
-        <h2 class="section-title">Testeur de Composant en Direct</h2>
-        <p class="section-subtitle">Interagissez avec le widget réactif créé avec AutoUI.</p>
+<span class="token-comment">// Écouter les changements d'état</span>
+store.<span class="token-function">subscribe</span>(<span class="token-string">'count'</span>, (newVal) =<span class="token-operator">&gt;</span> {[cite: 1]
+    console.log(<span class="token-string">`Valeur : ${newVal}`</span>);[cite: 1]
+});[cite: 1]
 
-        <div class="card" style="max-width: 600px; margin: 0 auto; text-align: center;">
-            <h3>Compteur Réactif</h3>
-            <p style="color: var(--text-muted); margin: 0.5rem 0 1.5rem;">L'état est géré en mémoire dynamique :</p>
-            
-            <div style="font-size: 3rem; font-weight: bold; color: var(--primary); margin-bottom: 1.5rem;" id="counterDisplay">
-                0
-            </div>
+<span class="token-comment">// Modifier l'état</span>
+store.count += <span class="token-string">1</span>;[cite: 1]</code></pre>
+                    </div>
+                </div>
 
-            <div style="display: flex; justify-content: center; gap: 1rem;">
-                <button class="btn btn-secondary" onclick="updateCounter(-1)">- Décrémenter</button>
-                <button class="btn btn-primary" onclick="updateCounter(1)">+ Incrémenter</button>
+                <div>
+                    <div class="card-3d border-orange" style="text-align: center;">
+                        <h4 class="text-orange" style="margin-bottom: 1rem;">Compteur Réactif</h4>
+                        <div id="counterVal" style="font-size: 3.5rem; font-weight: bold; color: var(--color-orange); margin-bottom: 1rem;">0</div>
+                        <button class="btn-3d btn-blue" style="margin: 0;" onclick="updateCounter(1)">Incrémenter +1</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -590,51 +517,48 @@ store.counter += 1;[cite: 1]</code></pre>
 
     <!-- FOOTER -->
     <footer>
-        <p>&copy; 2026 AutoUI Framework. Conçu et développé par <a href="https://github.com/marcisrael25" target="_blank">Marc-Israël</a>[cite: 1].</p>
-        <p style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">
-            Projet Open Source distribué sous la licence MIT[cite: 1].
-        </p>
+        <p>&copy; 2026 AutoUI Framework — Développé avec soin par Marc-Israël[cite: 1]. Licence MIT[cite: 1].</p>
     </footer>
 
-    <!-- Script Prism.js pour le parseur de syntaxe -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-
-    <!-- SCRIPTS INTERACTIFS -->
+    <!-- LOGIQUE JAVASCRIPT -->
     <script>
-        function switchTab(event, tabId) {
-            const tabs = document.querySelectorAll('.tab-btn');
-            const contents = document.querySelectorAll('.tab-content');
-
-            tabs.forEach(tab => tab.classList.remove('active'));
-            contents.forEach(content => content.classList.remove('active'));
-
-            event.currentTarget.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-        }
-
-        function copyCode(elementId) {
-            const codeText = document.getElementById(elementId).innerText;
-            navigator.clipboard.writeText(codeText).then(() => {
+        // Copie de code
+        function copyCode(id) {
+            const code = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(code).then(() => {
                 const btn = event.target;
-                const originalText = btn.innerText;
                 btn.innerText = 'Copié !';
-                btn.style.color = '#22c55e';
-                btn.style.borderColor = '#22c55e';
-                
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.style.color = '';
-                    btn.style.borderColor = '';
-                }, 2000);
+                setTimeout(() => btn.innerText = 'Copier', 2000);
             });
         }
 
-        let currentCount = 0;
+        // Compteur réactif local
+        let count = 0;
         function updateCounter(val) {
-            currentCount += val;
-            document.getElementById('counterDisplay').innerText = currentCount;
+            count += val;
+            document.getElementById('counterVal').innerText = count;
         }
+
+        // Effet 3D Tilt interactif sur la souris
+        document.querySelectorAll('.card-3d').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 12;
+                const rotateY = (centerX - x) / 12;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+            });
+        });
     </script>
 </body>
 </html>
